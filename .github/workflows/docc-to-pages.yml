@@ -1,0 +1,67 @@
+name: Build docc and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    runs-on: macos-latest
+
+    permissions:
+      contents: write
+      pages: write  
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.REMOTE_TOKEN }}
+
+    - name: Set up Git credentials for dependency fetching
+      run: |
+        git config --global credential.helper 'store --file=/tmp/.git-credentials'  # Use a custom file path for credentials
+        echo "https://$GITHUB_ACTOR:${{ secrets.REMOTE_TOKEN }}@github.com" > /tmp/.git-credentials
+        # This configures Git to use the PAT for any HTTPS operations
+
+    - name: Build Docc static site
+      run: |
+        swift package --allow-writing-to-directory ./dist generate-documentation --target ${{vars.FRAMEWORK_TARGET}} --output-path ./dist --transform-for-static-hosting --disable-indexing
+
+    - name: Add meta tags to index.html
+      run: |
+        URL="/documentation/$(echo ${{vars.FRAMEWORK_TARGET}} | tr '[:upper:]' '[:lower:]')/"
+        echo "URL is: ${URL}"  # Debugging line to check URL format
+
+        INDEX_FILE="./dist/index.html"
+        cp $INDEX_FILE "${INDEX_FILE}.bak"
+
+        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' >#" $INDEX_FILE
+        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Pragma' content='no-cache' >#" $INDEX_FILE
+        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Expires' content='0' >#" $INDEX_FILE
+        sed -i.bak "s#<head>#<head>\n<meta http-equiv='refresh' content='0; url=${URL}' >#" $INDEX_FILE
+
+        rm "${INDEX_FILE}.bak"  # This line is repeated, so one can be removed.
+
+    - name: Prepare .nojekyll file
+      run: touch dist/.noJekyll
+      
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        # Upload entire repository
+        path: 'dist'
+          
+    - name: Deploy to GitHub Pages
+      id: deployment
+      uses: actions/deploy-pages@v4
