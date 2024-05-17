@@ -12,12 +12,6 @@ extension URLRequest.Request {
     struct Body: RequestBody { }
 }
 
-extension URLRequest.Request.Body {
-    func modifierBody(_ request: URLRequest) throws -> URLRequest {
-        return try Self.modifierBody(self,  request: request)
-    }
-}
-
 extension URLRequest.MultipartFormData {
     struct Body: RequestBody {
         let boundary: String

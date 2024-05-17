@@ -26,6 +26,4 @@ extension URLRequest {
         let boundary: String
         let token: String?
     }
-    
-    
 }

@@ -9,6 +9,8 @@ import Foundation
 
 
 extension ServiceTask {
+    /// In case that we are not really interested in the response, just in download some data from
+    /// and specific URL we can use this function.
     public func data(url: String,
                      withCache: Bool = false,
                      delegate: (any URLSessionTaskDelegate)? = nil)

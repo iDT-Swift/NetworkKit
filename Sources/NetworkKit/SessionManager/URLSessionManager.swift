@@ -6,6 +6,26 @@
 //
 import Foundation
 
+fileprivate
+let logger = Logging.category(.setup)
+
+/// Currently we support two configurations, with or without memory cache.
+/// The second configuration relaies on existing App Cache configuration.
+/// If the cache memory was set, it will be used, otherwise it will silenty not be
+/// relevant during the HTTP calls.
+//
+/// This kit provides with the actor `URLSessionManager` that contains a `URLSession`.
+/// At this point there is no direct control over the `URLSession` rather than request
+/// its init with or without suppor for URLCache.
+/// And if this feature is requested, it will be implemented through the `URLCache.shared`
+/// object, and this is way in order to this cache memory been used is required that before
+/// the creation of a `URLSessionManager`, that `shared` proerty be initiated already.
+//
+/// There is a `URLSessionManager.init(withCache)` funnction which is public, if this function
+/// is used,a new `URLSession` will be create with each call to this function.
+/// Another option is to use tha shared objects `sharedWithCache` and `sharedWithoutCache`, which
+/// as their name shows, they where created with and without support for cache mamory.
+
 actor URLSessionManager {
     static func shared(withCache : Bool) -> URLSessionManager {
         withCache ? sharedWithCache : sharedWithoutCache
@@ -32,7 +52,7 @@ actor URLSessionManager {
             var message = "Custon URLSessionConfiguration."
             message += withCache ? "default" : "ephemeral"
             message += ".copy() as? URLSessionConfiguration"
-            assertionFailure(message)
+            logger.critical("\(message)")
             session = URLSession(configuration: URLSessionConfiguration.ephemeral)
         }
     }

@@ -28,7 +28,7 @@ actor Service {
     /// if the response has status code `200` otherwise throws a `NetworkError`.
     public init() {}
     
-    func callService(_ request:URLRequest,
+    public func callService(_ request:URLRequest,
                         withCache: Bool,
                         delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (data:Data, response:URLResponse)
@@ -46,11 +46,11 @@ actor Service {
     }
     
     /// Call to callService(_:withCache:delegate) and before pass over the data and response checks
-    /// if the data is decodable using the `erroProcessorType` and if it's decodable by it throws a
+    /// if the data is decodable using the `errorProcessorType` and if it's decodable by it throws a
     /// `NetworkError.customError(data:)`
-    func callService<T>(_ request:URLRequest,
+    public func callService<T>(_ request:URLRequest,
                         withCache: Bool,
-                        erroProcessorType: T.Type,
+                        errorProcessorType: T.Type,
                         delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (Data, URLResponse)
     where T: (Decodable & Error)

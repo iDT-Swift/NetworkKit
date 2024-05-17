@@ -11,12 +11,10 @@ protocol RequestBody: Codable, Sendable {
     func modifierBody(_ request: URLRequest) throws -> URLRequest
 }
 extension RequestBody {
-    static func modifierBody<T>(_ requestBody:T,  request: URLRequest) throws -> URLRequest
-    where T: RequestBody
-    {
+    func modifierBody(_ request: URLRequest) throws -> URLRequest {
         var request = request
-        guard let body = try requestBody.dictionary as? [String:Sendable] else {
-            throw NetworkError.anyToDictionary(bodyObject: requestBody)
+        guard let body = try self.dictionary as? [String:Sendable] else {
+            throw NetworkError.anyToDictionary(bodyObject: self)
         }
         request.httpBody = try JSONSerialization
             .data(withJSONObject: body,

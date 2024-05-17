@@ -8,6 +8,7 @@
 import OSLog
 
 enum Logging: String {
+    case setup = "Setup"
     case request = "Request"
     case response = "Response"
     case decoding = "Decoding"

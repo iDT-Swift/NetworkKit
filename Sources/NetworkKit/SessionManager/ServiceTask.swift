@@ -23,12 +23,10 @@ actor ServiceTask {
     }
     private var sessionTask: URLSessionTask?
     
-    public
-    func cancelRequest() {
+    public func cancelRequest() {
         sessionTask?.cancel()
     }
-    public
-    func callService(_ request:URLRequest,
+    public func callService(_ request:URLRequest,
                      withCache: Bool,
                      delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (data:Data, response:URLResponse)
