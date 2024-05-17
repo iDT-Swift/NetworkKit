@@ -17,10 +17,10 @@ extension Service {
     /// - Throws: `NetworkError` if an error occurs.
     
     public func employees(url: String)
-    async throws -> [URLRequest.Response.Employee] {
+    async throws -> [URLRequest.Employee] {
         let data = try await self.data(url: url, withCache: false)
         var employees = try JSONDecoder()
-            .decode(URLRequest.Response.Employees.self, from: data)
+            .decode(URLRequest.Employees.self, from: data)
             .employees
         var uuidSet = Set<String>()
         employees = employees.filter {

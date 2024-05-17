@@ -8,7 +8,7 @@
 import Foundation
 @testable import NetworkKit
 
-extension URLRequest.Response {
+extension URLRequest {
     public
     struct Employee: Codable, Hashable, Sendable, Identifiable {
         public
