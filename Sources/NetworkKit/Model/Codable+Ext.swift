@@ -34,5 +34,10 @@ extension Encodable {
             return hash.compactMap { String(format: "%02x", $0) }.joined().hashValue
         }
     }
+    func compareTo(_ right: Encodable) throws -> Bool {
+        let leftHashValue = try self.hashValue
+        let rightHashValue = try right.hashValue
+        return leftHashValue == rightHashValue
+    }
 }
 
