@@ -7,6 +7,7 @@
 
 import Foundation
 
+public
 protocol RequestBody: Codable, Sendable {
     func modifierBody(_ request: URLRequest) throws -> URLRequest
 }

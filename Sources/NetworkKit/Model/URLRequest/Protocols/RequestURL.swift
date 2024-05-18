@@ -7,12 +7,14 @@
 
 import Foundation
 
+public
 protocol RequestURL {
     var url:String { get }
     func makeOne() throws -> URLRequest
 }
 
 
+public
 extension RequestURL {
     func makeOne()
     throws -> URLRequest {

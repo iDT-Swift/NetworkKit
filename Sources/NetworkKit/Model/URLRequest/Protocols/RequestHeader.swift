@@ -7,10 +7,12 @@
 
 import Foundation
 
+public
 protocol RequestHeader {
     func modifierHeader(_ request: URLRequest) -> URLRequest
 }
 
+public
 extension URLRequest.Request {
     func modifierHeader(_ request: URLRequest) -> URLRequest {
         var request = request
@@ -23,6 +25,7 @@ extension URLRequest.Request {
     }
 }
 
+public
 extension URLRequest.MultipartFormData {
     func modifierHeader(_ request: URLRequest) -> URLRequest {
         var request = request

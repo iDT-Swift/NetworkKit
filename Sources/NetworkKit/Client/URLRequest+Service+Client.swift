@@ -12,18 +12,19 @@ import Foundation
 /// The structs below conform with URLRequestService because this conformance is
 /// if the URLRequest will be created using the `NetworkingKit` `init` function
 /// `URLRequest((_:bodyValue))`, 
+public
 extension URLRequest {
     struct Request: URLRequestService {
-        var httpMethod: HTTMethodValue
-        let url: String
-        let token: String?
+        public var httpMethod: HTTMethodValue
+        public let url: String
+        public let token: String?
     }
     
     struct MultipartFormData: URLRequestService {
         static var uniqueBoundaryIdentifier: String { "Boundary-\(UUID().uuidString)" }
-        var httpMethod: HTTMethodValue { .post }
-        let url: String
-        let boundary: String
-        let token: String?
+        public var httpMethod: HTTMethodValue { .post }
+        public let url: String
+        public let boundary: String
+        public let token: String?
     }
 }

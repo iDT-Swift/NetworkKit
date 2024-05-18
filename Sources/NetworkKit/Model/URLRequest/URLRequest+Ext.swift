@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+public
 extension URLRequest {
     func modifier( header: RequestHeader) -> URLRequest {
         header.modifierHeader(self)
@@ -19,9 +20,11 @@ extension URLRequest {
     }
 }
 
+public
 typealias URLRequestService = RequestURL & RequestHeader & HTTPMethod
 
 
+public
 extension URLRequest {
     /// Init a URLRequestService with an empty body.
     init<T>(_ requestService:T) throws
