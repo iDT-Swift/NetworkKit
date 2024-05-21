@@ -31,7 +31,7 @@ extension URLRequest {
     }
     
     struct MultipartFormData: URLRequestService {
-        static var uniqueBoundaryIdentifier: String { "Boundary-\(UUID().uuidString)" }
+        public static var uniqueBoundaryIdentifier: String { "Boundary-\(UUID().uuidString)" }
         public var httpMethod: HTTMethodValue { .post }
         public let url: String
         public let boundary: String

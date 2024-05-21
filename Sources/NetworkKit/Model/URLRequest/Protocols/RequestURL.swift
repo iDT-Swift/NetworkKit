@@ -18,7 +18,7 @@ public
 extension RequestURL {
     func makeOne()
     throws -> URLRequest {
-        let url = try URL(url )
+        let url = try URL(url)
         return URLRequest(url: url)
     }
 }
