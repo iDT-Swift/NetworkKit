@@ -8,19 +8,22 @@
 import Foundation
 
 
+public
 extension URLRequest.Request {
     struct Body: RequestBody { }
 }
 
+public
 extension URLRequest.MultipartFormData {
     struct Body: RequestBody {
-        let boundary: String
-        let keyValues: [String:String]
-        let dataFileKey: String
-        let dataFilePath: String
+        public let boundary: String
+        public let keyValues: [String:String]
+        public let dataFileKey: String
+        public let dataFilePath: String
     }
 }
 
+public
 extension URLRequest.MultipartFormData.Body {
     func modifierBody(_ request: URLRequest) throws -> URLRequest {
         var request = request

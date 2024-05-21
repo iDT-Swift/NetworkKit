@@ -11,6 +11,7 @@ public
 protocol RequestBody: Codable, Sendable {
     func modifierBody(_ request: URLRequest) throws -> URLRequest
 }
+public
 extension RequestBody {
     func modifierBody(_ request: URLRequest) throws -> URLRequest {
         var request = request
