@@ -17,7 +17,17 @@ extension URLRequest {
     struct Request: URLRequestService {
         public var httpMethod: HTTMethodValue
         public let url: String
-        public let token: String?
+        public let headerFieldValue: [String:String]
+        public init(httpMethod: HTTMethodValue, 
+                    url: String,
+                    headerFieldValue: [String : String] = [
+                        "Content-Type":"application/json",
+                        "Accept":"application/json"
+                    ]) {
+            self.httpMethod = httpMethod
+            self.url = url
+            self.headerFieldValue = headerFieldValue
+        }
     }
     
     struct MultipartFormData: URLRequestService {
@@ -25,6 +35,8 @@ extension URLRequest {
         public var httpMethod: HTTMethodValue { .post }
         public let url: String
         public let boundary: String
-        public let token: String?
+        public let headerFieldValue: [String:String]
+        // Standards field/values
+        // ["Content-Type":"application/json", "X-Cognito-Auth": <toke>]
     }
 }

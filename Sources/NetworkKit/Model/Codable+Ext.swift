@@ -9,6 +9,7 @@ import CryptoKit
 
 enum CodableError: Error {
     case StringInitializer(encoding: String.Encoding)
+    case EncodableNotCompatible
 }
 
 public
@@ -41,3 +42,18 @@ extension Encodable {
     }
 }
 
+extension Encodable {
+    var keyValues: [(key:String, value:String)] {
+        get throws {
+            let jsonData = try JSONEncoder().encode(self)
+            if let keyValueList = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any?] {
+                return keyValueList
+                    .compactMap { ($0.key, $0.value) as? (key:String,value:Any) }
+                    .map { (key:$0.key,value: String(describing: $0.value) ) }
+            }
+            else {
+                throw CodableError.EncodableNotCompatible
+            }
+        }
+    }
+}

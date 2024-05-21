@@ -67,8 +67,8 @@ extension Data {
         self.append(try "\r\n".tryData(using: .utf8))
     }
     mutating
-    func appendForm(_ keyName: String, imageFilePath: String) throws {
-        let fileURL = URL(fileURLWithPath: imageFilePath)
+    func appendForm(_ keyName: String, dataFilePath: String) throws {
+        let fileURL = URL(fileURLWithPath: dataFilePath)
         guard let fileName = fileURL.lastPathComponent as String? else {
             throw NetworkError.urlEmptyPath
         }

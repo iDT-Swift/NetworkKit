@@ -16,8 +16,7 @@ extension ServiceTask {
                      delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> Data {
         let requestService = URLRequest.Request(httpMethod: .get,
-                                                url: url,
-                                                token: nil)
+                                                url: url)
         let request = try URLRequest(requestService)
         
         return try await self

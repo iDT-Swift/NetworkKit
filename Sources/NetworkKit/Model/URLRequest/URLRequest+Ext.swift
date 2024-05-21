@@ -9,8 +9,8 @@ import SwiftUI
 
 public
 extension URLRequest {
-    func modifier( header: RequestHeader) -> URLRequest {
-        header.modifierHeader(self)
+    func modifier( header: RequestHeader) throws -> URLRequest {
+        try header.modifierHeader(self)
     }
     func modifier( httpMethod: HTTPMethod) -> URLRequest {
         httpMethod.modifierHTTPMethod(self)
