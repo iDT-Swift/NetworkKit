@@ -38,5 +38,12 @@ extension URLRequest {
         public let headerFieldValue: [String:String]
         // Standards field/values
         // ["Content-Type":"application/json", "X-Cognito-Auth": <toke>]
+        public init(url: String, 
+                    boundary: String = MultipartFormData.uniqueBoundaryIdentifier,
+                    headerFieldValue: [String : String] = .init()) {
+            self.url = url
+            self.boundary = boundary
+            self.headerFieldValue = headerFieldValue
+        }
     }
 }
