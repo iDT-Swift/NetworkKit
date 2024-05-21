@@ -48,7 +48,10 @@ extension Encodable {
             let jsonData = try JSONEncoder().encode(self)
             if let keyValueList = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any?] {
                 return keyValueList
-                    .compactMap { ($0.key, $0.value) as? (key:String,value:Any) }
+                    .compactMap { (key, value) -> (key: String, value: Any)? in
+                        guard let value = value else { return nil }
+                        return (key, value)
+                    }
                     .map { (key:$0.key,value: String(describing: $0.value) ) }
             }
             else {
