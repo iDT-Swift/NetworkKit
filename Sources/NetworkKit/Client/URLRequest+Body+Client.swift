@@ -10,7 +10,9 @@ import Foundation
 
 public
 extension URLRequest.Request {
-    struct Body: RequestBody { }
+    struct Body: RequestBody { 
+        public init() {}
+    }
 }
 
 public
@@ -20,6 +22,15 @@ extension URLRequest.MultipartFormData {
         public let keyValues: [String:String]
         public let dataFileKey: String
         public let dataFilePath: String
+        public init(boundary: String,
+                    keyValues: [String : String],
+                    dataFileKey: String,
+                    dataFilePath: String) {
+            self.boundary = boundary
+            self.keyValues = keyValues
+            self.dataFileKey = dataFileKey
+            self.dataFilePath = dataFilePath
+        }
     }
 }
 
