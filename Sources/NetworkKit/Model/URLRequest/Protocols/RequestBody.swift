@@ -77,7 +77,7 @@ extension Data {
             throw NetworkError.urlWithoutFileExtension
         }
         let options: Data.ReadingOptions = [.alwaysMapped, .uncached]
-        let imageData = try Data(contentsOf: fileURL, options: options)
+        let data = try Data(contentsOf: fileURL, options: options)
         self.append(try "Content-Disposition: form-data; name=\"".tryData(using: .utf8))
         self.append(try keyName.tryData(using: .utf8))
         self.append(try "\"; filename=\"".tryData(using: .utf8))
@@ -87,7 +87,7 @@ extension Data {
         self.append(try "Content-Disposition: form-data; name=\"".tryData(using: .utf8))
         self.append(try fileType.tryData(using: .utf8))
         self.append(try "\r\n\r\n".tryData(using: .utf8))
-        self.append(imageData)
+        self.append(data)
         self.append(try "\r\n".tryData(using: .utf8))
     }
 }

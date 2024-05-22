@@ -32,7 +32,7 @@ described in the previous section together with models that define the structure
 of the responded data and also conforms with the protocols described in the previous
 section. See example below:
 
-```
+```Swift
 extension URLRequest {
     struct SignUp: Codable {
         let env: String
