@@ -7,6 +7,7 @@
 
 import Foundation
 
+public
 enum CustomNetworkError<T>: Error
 where T: Decodable
 {
