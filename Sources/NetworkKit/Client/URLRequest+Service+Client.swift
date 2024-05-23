@@ -48,10 +48,12 @@ extension URLRequest {
     }
 }
 
+public
 extension URLRequest.Request {
     struct Response { }
 }
 
+public
 extension URLRequest.MultipartFormData {
     struct Response { }
 }
