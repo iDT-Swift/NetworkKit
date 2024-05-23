@@ -71,7 +71,7 @@ actor Service {
             throw error
         }
         
-        if T.checkStatus {
+        if T.checkStatus == false {
             let body = try JSONDecoder().decode(T.self, from: data)
             throw CustomNetworkError.responseError(body: body, response: response)
         }
