@@ -47,3 +47,11 @@ extension URLRequest {
         }
     }
 }
+
+extension URLRequest.Request {
+    struct Response { }
+}
+
+extension URLRequest.MultipartFormData {
+    struct Response { }
+}

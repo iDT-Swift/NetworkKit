@@ -15,9 +15,8 @@ enum NetworkError: Error {
     case urlInitializer(string:String)
     case urlEmptyPath
     case urlWithoutFileExtension
-    case responseError(response:URLResponse?)
-    case emptyData
-    case error(urlResponse:HTTPURLResponse)
+    case responseError(data: Data?, response:URLResponse?)
+    case statusError(data: Data, urlResponse:HTTPURLResponse)
     case anyToDictionary(bodyObject: Encodable & Sendable)
     case customError(data:Data)
 }

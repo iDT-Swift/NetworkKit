@@ -41,21 +41,16 @@ actor ServiceTask {
                         continuation.resume(throwing: error)
                         return
                     }
-                    guard let urlResponse = response as? HTTPURLResponse else {
-                        let error = NetworkError.responseError(response: response)
+                    guard let data = data, let response = response,
+                          let urlResponse = response as? HTTPURLResponse else {
+                        let error = NetworkError.responseError(data: data, response: response)
                         continuation.resume(throwing: error)
                         return
                     }
                     guard urlResponse.statusCode == 200 else {
-                        let error = NetworkError.error(urlResponse: urlResponse)
+                        let error = NetworkError.statusError(data: data, urlResponse: urlResponse)
                         continuation.resume(throwing: error)
                         return
-                    }
-                    guard let data = data else {
-                        let error = NetworkError.emptyData
-                        continuation.resume(throwing: error)
-                        return
-                        
                     }
                     continuation.resume(returning: (data:data,urlResponse) )
             })

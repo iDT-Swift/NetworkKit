@@ -10,6 +10,10 @@ import Foundation
 fileprivate
 let logger = Logging.category(.request)
 
+public
+protocol ErrorProcessor {
+    static var checkStatus: Bool { get }
+}
 
 ///
 /// This actor serves as the package interface.
@@ -37,10 +41,10 @@ actor Service {
             .shared(withCache: withCache)
             .resume(from: request, delegate: delegate)
         guard let urlResponse = response as? HTTPURLResponse else { 
-            throw NetworkError.responseError(response: response)
+            throw NetworkError.responseError(data: data, response: response)
         }
         guard urlResponse.statusCode == 200 else {
-            throw NetworkError.error(urlResponse: urlResponse)
+            throw NetworkError.statusError(data: data, urlResponse: urlResponse)
         }
         return (data, response)
     }
@@ -53,13 +57,23 @@ actor Service {
                         errorProcessorType: T.Type,
                         delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (Data, URLResponse)
-    where T: (Decodable & Error)
+    where T: (Decodable & Error & ErrorProcessor)
     {
-        let (data, response) = try await self
-            .callService(request, withCache: withCache, delegate: delegate)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await self
+                .callService(request, withCache: withCache, delegate: delegate)
+        } catch NetworkError.statusError(let data, let urlResponse) {
+            let body = try JSONDecoder().decode(T.self, from: data)
+            throw CustomNetworkError.statusError(body: body, urlResponse: urlResponse)
+        } catch {
+            throw error
+        }
         
-        if let _ = try? JSONDecoder().decode(T.self, from: data) {
-            throw NetworkError.customError(data: data)
+        if T.checkStatus {
+            let body = try JSONDecoder().decode(T.self, from: data)
+            throw CustomNetworkError.responseError(body: body, response: response)
         }
         
         return (data, response)

@@ -37,7 +37,7 @@ final class SQMobileTests: XCTestCase {
         do {
             let _ = try await ServiceTask().data(url: url)
             XCTFail("The call with the URL above should fail because there is not data at this URL")
-        } catch NetworkError.error(let urlResponse) {
+        } catch NetworkError.statusError( _, let urlResponse) {
             XCTAssertEqual(urlResponse.statusCode, 404, "The status code is \(urlResponse.statusCode) instead of 404")
         } catch {
             XCTFail("The error expected must be `NetworkError.error` with status code 404")
