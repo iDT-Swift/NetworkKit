@@ -21,6 +21,19 @@ extension Encodable {
             
         }
     }
+    var prettyPrinted: String {
+        get throws {
+            let encoder = JSONEncoder()
+            // In order to ensure encoding consistency we set sorted keys formatting.
+            encoder.outputFormatting = [.sortedKeys, .prettyPrinted] // We may want add this one too: .withoutEscapingSlashes
+            let data = try encoder.encode(self)
+            let encoding:String.Encoding = .utf8
+            guard let jsonString = String(data: data, encoding: encoding) else {
+                throw CodableError.StringInitializer(encoding: encoding)
+            }
+            return jsonString
+        }
+    }
     var hashValue: Int {
         get throws {
             let encoder = JSONEncoder()

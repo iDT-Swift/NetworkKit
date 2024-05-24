@@ -18,11 +18,25 @@ final class CodableExtTests: XCTestCase {
     }
 
     func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+        struct MyStruc: Codable {
+            let id: String
+            let name: String
+            let value: Int
+        }
+        let id = UUID().uuidString
+        let name = UUID().uuidString
+        let value =  Int.random(in: 1..<10_000)
+        let myStruct = MyStruc(id: id, name: name, value: value)
+        let prettyPrinted = try myStruct.prettyPrinted
+        // The identation used by Foundation is two spaces
+        let mock = """
+        {
+          "id" : "\(id)",
+          "name" : "\(name)",
+          "value" : \(value)
+        }
+        """
+        XCTAssertEqual(prettyPrinted, mock, "prettyPrinted and mock must be equal")
     }
 
     func testPerformanceExample() throws {
