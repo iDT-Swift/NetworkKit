@@ -14,7 +14,14 @@ public
 actor ServiceTask {
     /// Create a URLSessionManager with or without cache startegy, return the data and the response
     /// if the response has status code `200` otherwise throws a `NetworkError`.
-    public init() {}
+    let retryPolicy: URLRequest.RetryPolicy
+    public init() {
+        self.init(retryPolicy: .init())
+    }
+    public init(retryPolicy: URLRequest.RetryPolicy) {
+        self.retryPolicy = retryPolicy
+    }
+    
     deinit {
         if sessionTask?.state == .running {
             logger.debug("sessionTask is about to be cancelled.")
@@ -42,17 +49,17 @@ actor ServiceTask {
                         return
                     }
                     guard let data = data, let response = response,
-                          let urlResponse = response as? HTTPURLResponse else {
+                          let httpResponse = response as? HTTPURLResponse else {
                         let error = NetworkError.responseError(data: data, response: response)
                         continuation.resume(throwing: error)
                         return
                     }
-                    guard urlResponse.statusCode == 200 else {
-                        let error = NetworkError.statusError(data: data, urlResponse: urlResponse)
+                    guard httpResponse.status == .Complete else {
+                        let error = NetworkError.statusError(data: data, httpResponse: httpResponse)
                         continuation.resume(throwing: error)
                         return
                     }
-                    continuation.resume(returning: (data:data,urlResponse) )
+                    continuation.resume(returning: (data:data,httpResponse) )
             })
             sessionTask?.delegate = delegate
             sessionTask?.resume()

@@ -18,7 +18,7 @@ extension Service {
     
     public func employees(url: String)
     async throws -> [URLRequest.Employee] {
-        let data = try await self.data(url: url, withCache: false)
+        let (data,_) = try await self.data(url: url, withCache: false)
         var employees = try JSONDecoder()
             .decode(URLRequest.Employees.self, from: data)
             .employees

@@ -29,22 +29,34 @@ protocol ErrorProcessor {
 public
 actor Service {
     /// Create a URLSessionManager with or without cache startegy, return the data and the response
-    /// if the response has status code `200` otherwise throws a `NetworkError`.
-    public init() {}
+    /// if the response has status code `200..<300>` otherwise throws a `NetworkError`unless
+    ///  There RetryPolicy says otherway
+
+    let retryPolicy: URLRequest.RetryPolicy
+    public init() {
+        self.init(retryPolicy: .init())
+    }
+    public init(retryPolicy: URLRequest.RetryPolicy) {
+        self.retryPolicy = retryPolicy
+    }
     
     public func callService(_ request:URLRequest,
                         withCache: Bool,
                         delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (data:Data, response:URLResponse)
     {
-        let (data, response) = try await URLSessionManager
-            .shared(withCache: withCache)
-            .resume(from: request, delegate: delegate)
-        guard let urlResponse = response as? HTTPURLResponse else { 
+        let (data, response) = try await retryPolicy
+            .fetchData() {
+                try await URLSessionManager
+                    .shared(withCache: withCache)
+                    .resume(from: request, delegate: delegate)
+            }
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.responseError(data: data, response: response)
         }
-        guard urlResponse.statusCode == 200 else {
-            throw NetworkError.statusError(data: data, urlResponse: urlResponse)
+        guard httpResponse.status == .Complete else {
+            throw NetworkError.statusError(data: data, httpResponse: httpResponse)
         }
         return (data, response)
     }
@@ -53,9 +65,10 @@ actor Service {
     /// if the data is decodable using the `errorProcessorType` and if it's decodable by it throws a
     /// `NetworkError.customError(data:)`
     public func callService<T>(_ request:URLRequest,
-                        withCache: Bool,
-                        errorProcessorType: T.Type,
-                        delegate: (any URLSessionTaskDelegate)? = nil)
+                               withCache: Bool,
+                               errorProcessorType: T.Type,
+                               delegate: (any URLSessionTaskDelegate)? = nil
+    )
     async throws -> (Data, URLResponse)
     where T: (Decodable & Error & ErrorProcessor)
     {

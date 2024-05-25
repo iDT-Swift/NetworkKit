@@ -11,7 +11,7 @@ extension Service {
     public func data(url: String,
                      withCache: Bool = false,
                      delegate: (any URLSessionTaskDelegate)? = nil)
-    async throws -> Data {
+    async throws -> (Data, URLResponse) {
         let requestService = URLRequest.Request(httpMethod: .get,
                                                 url: url)
         let request = try URLRequest(requestService)
@@ -20,6 +20,5 @@ extension Service {
             .callService(request,
                          withCache: withCache,
                          delegate: delegate)
-            .data
     }
 }
