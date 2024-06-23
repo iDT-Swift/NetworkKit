@@ -13,7 +13,8 @@ extension Service {
                      delegate: (any URLSessionTaskDelegate)? = nil)
     async throws -> (Data, URLResponse) {
         let requestService = URLRequest.Request(httpMethod: .get,
-                                                url: url)
+                                                url: url,
+                                                headerFieldValue: .init())
         let request = try URLRequest(requestService)
         
         return try await self
