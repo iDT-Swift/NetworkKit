@@ -36,7 +36,7 @@ jobs:
 
     - name: Build Docc static site
       run: |
-        swift package --allow-writing-to-directory ./dist generate-documentation --output-path ./dist --transform-for-static-hosting --disable-indexing
+        swift package --allow-writing-to-directory ./dist generate-documentation --target ${{vars.FRAMEWORK_TARGET}} --output-path ./dist --transform-for-static-hosting --disable-indexing
 
     - name: Prepare .nojekyll file
       run: touch dist/.noJekyll
