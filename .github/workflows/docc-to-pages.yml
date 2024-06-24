@@ -36,22 +36,7 @@ jobs:
 
     - name: Build Docc static site
       run: |
-        swift package --allow-writing-to-directory ./dist generate-documentation --target ${{vars.FRAMEWORK_TARGET}} --output-path ./dist --transform-for-static-hosting --disable-indexing
-
-    - name: Add meta tags to index.html
-      run: |
-        URL="/documentation/$(echo ${{vars.FRAMEWORK_TARGET}} | tr '[:upper:]' '[:lower:]')/"
-        echo "URL is: ${URL}"  # Debugging line to check URL format
-
-        INDEX_FILE="./dist/index.html"
-        cp $INDEX_FILE "${INDEX_FILE}.bak"
-
-        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Cache-Control' content='no-cache, no-store, must-revalidate' >#" $INDEX_FILE
-        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Pragma' content='no-cache' >#" $INDEX_FILE
-        sed -i.bak "s#<head>#<head>\n<meta http-equiv='Expires' content='0' >#" $INDEX_FILE
-        sed -i.bak "s#<head>#<head>\n<meta http-equiv='refresh' content='0; url=${URL}' >#" $INDEX_FILE
-
-        rm "${INDEX_FILE}.bak"  # This line is repeated, so one can be removed.
+        swift package --allow-writing-to-directory ./dist generate-documentation --output-path ./dist --transform-for-static-hosting --disable-indexing
 
     - name: Prepare .nojekyll file
       run: touch dist/.noJekyll
