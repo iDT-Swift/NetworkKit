@@ -45,11 +45,11 @@ jobs:
       # run: xcodebuild docbuild -scheme ${{vars.FRAMEWORK_TARGET}} -destination 'generic/platform=iOS Simulator' -derivedDataPath ./build OTHER_DOCC_FLAGS="--output-path ./dist --transform-for-static-hosting --hosting-base-path /${{vars.FRAMEWORK_TARGET}}"
       run: xcodebuild docbuild -scheme ${{vars.FRAMEWORK_TARGET}} -destination 'generic/platform=iOS Simulator' -derivedDataPath ./build OTHER_DOCC_FLAGS="--output-path ./dist --transform-for-static-hosting --hosting-base-path /"
 
-    - name: Upload Documentation
-      uses: actions/upload-artifact@v2
-      with:
-        name: documentation
-        path: ./dist
+    # - name: Upload Documentation
+    #   uses: actions/upload-artifact@v2
+    #   with:
+    #     name: documentation
+    #     path: ./dist
 
     - name: Prepare .nojekyll file
       run: touch dist/.noJekyll
