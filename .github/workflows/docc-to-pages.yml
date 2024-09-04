@@ -28,28 +28,12 @@ jobs:
       with:
         token: ${{ secrets.REMOTE_TOKEN }}
 
-    # - name: Set up Git credentials for dependency fetching
-    #   run: |
-    #     git config --global credential.helper 'store --file=/tmp/.git-credentials'  # Use a custom file path for credentials
-    #     echo "https://$GITHUB_ACTOR:${{ secrets.REMOTE_TOKEN }}@github.com" > /tmp/.git-credentials
-    #     # This configures Git to use the PAT for any HTTPS operations
-
-    # - name: Build Docc static site
-    #   run: |
-    #     swift package --allow-writing-to-directory ./dist generate-documentation --target ${{vars.FRAMEWORK_TARGET}} --output-path ./dist --transform-for-static-hosting --disable-indexing
-
     - name: Set up Xcode
       run: sudo xcode-select --switch /Applications/Xcode.app/Contents/Developer
 
     - name: Build Documentation
       # run: xcodebuild docbuild -scheme ${{vars.FRAMEWORK_TARGET}} -destination 'generic/platform=iOS Simulator' -derivedDataPath ./build OTHER_DOCC_FLAGS="--output-path ./dist --transform-for-static-hosting --hosting-base-path /${{vars.FRAMEWORK_TARGET}}"
       run: xcodebuild docbuild -scheme ${{vars.FRAMEWORK_TARGET}} -destination 'generic/platform=iOS Simulator' -derivedDataPath ./build OTHER_DOCC_FLAGS="--output-path ./dist --transform-for-static-hosting --hosting-base-path /"
-
-    # - name: Upload Documentation
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: documentation
-    #     path: ./dist
 
     - name: Prepare .nojekyll file
       run: touch dist/.noJekyll
